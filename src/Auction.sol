@@ -36,8 +36,8 @@ contract UpgradableAuction {
 
 contract AuctionLogic {
     address highestBidder;
-    uint256 expiryTime;
     mapping(address => uint256) public bids;
+    uint256 expiryTime;
 
     function init() public {
         require(expiryTime == 0, "Contract already initialized");
