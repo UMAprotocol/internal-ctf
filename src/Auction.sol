@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-// Challenge: drain the auction.
+// Challenge: 
+// 1. The AuctionLogic contract is deployed.
+// 2. The UpgradableAuction contract is deployed by someone else with the address of the AuctionLogic contract set as logic.
+// 3. Other people bid.
+// 4. Your task is to drain everyone else's bids and take back your own.
 contract UpgradableAuction {
     address public admin;
     address public logic;
