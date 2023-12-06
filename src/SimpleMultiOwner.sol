@@ -62,8 +62,11 @@ contract SimpleMultiOwner {
         emit Execute(proposalId, target, data, proposalOwners);
     }
 
-    function _hashTransaction(address target, bytes memory data, address[] memory proposalOwners) internal pure returns (bytes32) {
+    function _hashTransaction(address target, bytes memory data, address[] memory proposalOwners)
+        internal
+        pure
+        returns (bytes32)
+    {
         return keccak256(abi.encodePacked(target, data, proposalOwners));
     }
-
 }

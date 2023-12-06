@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-// Challenge: 
+// Challenge:
 // 1. The AuctionLogic contract is deployed.
 // 2. The UpgradableAuction contract is deployed by someone else with the address of the AuctionLogic contract set as logic.
 // 3. Other people bid.
@@ -10,7 +10,7 @@ contract UpgradableAuction {
     address public admin;
     address public logic;
 
-    constructor (address _logic) {
+    constructor(address _logic) {
         admin = msg.sender;
         logic = _logic;
     }
