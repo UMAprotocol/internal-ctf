@@ -10,6 +10,7 @@ pragma solidity ^0.8.13;
 
 contract WriteRevert {
     uint256 public value;
+
     function setValue(uint256 _value) public {
         value = _value;
     }
@@ -17,7 +18,7 @@ contract WriteRevert {
 
 contract TriggerWriteRevert {
     function forceRevert1() public {
-        // Your code here!    
+        // Your code here!
     }
 
     function forceRevert2() public {
@@ -28,4 +29,3 @@ contract TriggerWriteRevert {
         // Your code here!
     }
 }
-
