@@ -22,6 +22,35 @@ contract Poker is Ownable {
     error PlayerNotFound();
 
     /**
+     * @dev Allows multiple functions to be called in a single transaction
+     * @param data The data for each function call
+     * @return results The results of each function call
+     */
+    function multicall(
+        bytes[] calldata data
+    ) external payable returns (bytes[] memory results) {
+        uint256 dataLength = data.length;
+        results = new bytes[](dataLength);
+
+        for (uint256 i = 0; i < dataLength; ++i) {
+            (bool success, bytes memory result) = address(this).delegatecall(
+                data[i]
+            );
+
+            if (!success) {
+                // Next 5 lines from https://ethereum.stackexchange.com/a/83577
+                if (result.length < 68) revert();
+                assembly {
+                    result := add(result, 0x04)
+                }
+                revert(abi.decode(result, (string)));
+            }
+
+            results[i] = result;
+        }
+    }
+
+    /**
      * @dev Allows admin to update a player's balance
      * @param player The address of the player
      * @param adjustment The adjustment to the player's balance (can be negative for owed money)
@@ -32,7 +61,6 @@ contract Poker is Ownable {
     ) external onlyOwner {
         if (player == address(0)) revert PlayerNotFound();
 
-        int256 previousBalance = playerBalances[player];
         playerBalances[player] += adjustment;
 
         emit AdminBalanceUpdate(player, adjustment);
