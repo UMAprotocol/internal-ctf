@@ -51,6 +51,8 @@ contract Poker is Ownable {
     function deposit() public payable {
         if (msg.value == 0) revert InvalidAmount();
 
+        playerBalances[msg.sender] += int256(msg.value);
+
         emit Deposit(msg.sender, msg.value);
     }
 
