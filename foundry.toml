@@ -2,5 +2,9 @@
 src = 'src'
 out = 'out'
 libs = ['lib']
+solc-version = "0.8.30"
+optimizer = true
+optimizer-runs = 0 # or a higher value for better performance
+via_ir = true # or true for the IR pipeline
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
