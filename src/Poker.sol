@@ -12,15 +12,9 @@ contract Poker is Ownable {
     // Mapping to track each player's balance
     mapping(address => int256) public playerBalances;
 
-    // Events
-    event BalanceUpdated(
-        address indexed player,
-        int256 newBalance,
-        int256 previousBalance
-    );
     event Deposit(address indexed player, uint256 amount);
     event Withdrawal(address indexed player, uint256 amount);
-    event AdminBalanceUpdate(address indexed player, int256 newBalance);
+    event AdminBalanceUpdate(address indexed player, int256 adjustment);
 
     // Errors
     error InsufficientBalance();
@@ -30,19 +24,18 @@ contract Poker is Ownable {
     /**
      * @dev Allows admin to update a player's balance
      * @param player The address of the player
-     * @param newBalance The new balance for the player (can be negative for owed money)
+     * @param adjustment The adjustment to the player's balance (can be negative for owed money)
      */
     function updatePlayerBalance(
         address player,
-        int256 newBalance
+        int256 adjustment
     ) external onlyOwner {
         if (player == address(0)) revert PlayerNotFound();
 
         int256 previousBalance = playerBalances[player];
-        playerBalances[player] = newBalance;
+        playerBalances[player] += adjustment;
 
-        emit AdminBalanceUpdate(player, newBalance);
-        emit BalanceUpdated(player, newBalance, previousBalance);
+        emit AdminBalanceUpdate(player, adjustment);
     }
 
     /**
@@ -78,7 +71,6 @@ contract Poker is Ownable {
         playerBalances[msg.sender] = 0;
 
         emit Withdrawal(msg.sender, withdrawAmount);
-        emit BalanceUpdated(msg.sender, 0, balance);
     }
 
     /**
@@ -100,10 +92,9 @@ contract Poker is Ownable {
         if (!success) revert();
 
         // Update player balance
-        playerBalances[msg.sender] = balance - int256(amount);
+        playerBalances[msg.sender] -= int256(amount);
 
         emit Withdrawal(msg.sender, amount);
-        emit BalanceUpdated(msg.sender, balance - int256(amount), balance);
     }
 
     /**
